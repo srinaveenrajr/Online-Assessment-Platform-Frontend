@@ -42,7 +42,7 @@ export default function ExamPage() {
     const fetchExam = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/exams/${id}/start`
+          `https://online-assessment-platform-backend-1.onrender.com/api/exams/${id}/start`
         );
 
         // 🔒 Safety checks
@@ -78,12 +78,15 @@ export default function ExamPage() {
       if (document.hidden) {
         alert("⚠️ Tab switch detected!");
 
-        await axios.post("http://localhost:5000/api/proctor/log", {
-          studentId: user._id,
-          examId: exam._id,
-          type: "TAB_SWITCH",
-          message: "Student switched tab",
-        });
+        await axios.post(
+          "https://online-assessment-platform-backend-1.onrender.com/api/proctor/log",
+          {
+            studentId: user._id,
+            examId: exam._id,
+            type: "TAB_SWITCH",
+            message: "Student switched tab",
+          }
+        );
       }
     };
 
@@ -111,12 +114,15 @@ export default function ExamPage() {
       if (!document.fullscreenElement) {
         alert("⚠️ Fullscreen exit detected!");
 
-        await axios.post("http://localhost:5000/api/proctor/log", {
-          studentId: user._id,
-          examId: exam._id,
-          type: "FULLSCREEN_EXIT",
-          message: "Student exited fullscreen",
-        });
+        await axios.post(
+          "https://online-assessment-platform-backend-1.onrender.com/api/proctor/log",
+          {
+            studentId: user._id,
+            examId: exam._id,
+            type: "FULLSCREEN_EXIT",
+            message: "Student exited fullscreen",
+          }
+        );
       }
     };
 
@@ -135,12 +141,15 @@ export default function ExamPage() {
     navigator.mediaDevices.getUserMedia({ video: true }).catch(async () => {
       alert("⚠️ Camera access denied!");
 
-      await axios.post("http://localhost:5000/api/proctor/log", {
-        studentId: user._id,
-        examId: exam._id,
-        type: "CAMERA_DENIED",
-        message: "Camera permission denied",
-      });
+      await axios.post(
+        "https://online-assessment-platform-backend-1.onrender.com/api/proctor/log",
+        {
+          studentId: user._id,
+          examId: exam._id,
+          type: "CAMERA_DENIED",
+          message: "Camera permission denied",
+        }
+      );
     });
   }, [exam, user]);
 
