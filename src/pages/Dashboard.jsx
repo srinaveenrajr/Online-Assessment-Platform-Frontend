@@ -1,44 +1,88 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
   const [exams, setExams] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
   useEffect(() => {
-    if (user.role === "admin") {
-      navigate("/admin/dashboard");
-      return;
-    }
+    const fetchExams = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/exams`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
-    axios
-      .get(
-        "https://online-assessment-platform-backend-1.onrender.com/api/exams"
-      )
-      .then((res) => setExams(res.data));
+        setExams(res.data);
+      } catch (err) {
+        alert("Failed to load exams");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExams();
   }, []);
 
+  const now = new Date();
+
+  if (loading) return <p>Loading dashboard...</p>;
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Available Exams</h1>
+    <>
+      <Navbar />
+      <div style={{ padding: "20px" }}>
+        <h2>Dashboard</h2>
 
-      {exams.length === 0 && <p>No exams available</p>}
+        {exams.length === 0 && <p>No exams available</p>}
 
-      {exams.map((exam) => (
-        <div key={exam._id} className="border p-4 mb-3 rounded">
-          <h2 className="font-semibold">{exam.title}</h2>
+        {exams.map((exam) => {
+          const isActive =
+            now >= new Date(exam.startTime) && now <= new Date(exam.endTime);
 
-          <button
-            onClick={() => navigate(`/exam/${exam._id}`)}
-            className="mt-2 bg-blue-600 text-white px-4 py-1 rounded"
-          >
-            Take Test
-          </button>
-        </div>
-      ))}
-    </div>
+          return (
+            <div
+              key={exam._id}
+              style={{
+                border: "1px solid #ccc",
+                padding: "15px",
+                marginBottom: "15px",
+                borderRadius: "6px",
+              }}
+            >
+              <h3>{exam.title}</h3>
+
+              <p>
+                Status:{" "}
+                <b style={{ color: isActive ? "green" : "red" }}>
+                  {isActive ? "Active" : "Not Active"}
+                </b>
+              </p>
+
+              <button
+                disabled={!isActive}
+                onClick={() => navigate(`/exam/${exam._id}`)}
+                style={{
+                  backgroundColor: isActive ? "#007bff" : "#ccc",
+                  color: "white",
+                  border: "none",
+                  padding: "8px 12px",
+                  cursor: isActive ? "pointer" : "not-allowed",
+                }}
+              >
+                Start Exam
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }
