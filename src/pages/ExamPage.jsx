@@ -1,87 +1,157 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function ExamPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
+
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
 
   const [exam, setExam] = useState(null);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const token = localStorage.getItem("token");
+
+  /* ===========================
+     PROCTOR LOG (FIXED)
+  =========================== */
+  const logViolation = async (type, message) => {
+    try {
+      await axios.post(
+        "http://localhost:5000/api/proctor/log",
+        {
+          examId: id,
+          type,
+          message,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch (err) {
+      console.error("Proctor log failed");
+    }
+  };
+
+  /* ===========================
+     START WEBCAM
+  =========================== */
+  const startWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      streamRef.current = stream;
+      videoRef.current.srcObject = stream;
+    } catch {
+      alert("Webcam permission is mandatory");
+      logViolation("WEBCAM_BLOCKED", "Webcam permission denied");
+    }
+  };
+
+  /* ===========================
+     STOP WEBCAM
+  =========================== */
+  const stopWebcam = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.srcObject = null;
+    }
+  };
+
+  /* ===========================
+     LOAD EXAM
+  =========================== */
   useEffect(() => {
     if (!id) {
-      navigate("/dashboard");
+      window.location.replace("/dashboard");
       return;
     }
 
     const fetchExam = async () => {
       try {
-        const token = localStorage.getItem("token");
-
         const res = await axios.get(`http://localhost:5000/api/exams/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         setExam(res.data);
-      } catch (err) {
-        navigate("/dashboard");
+        document.documentElement.requestFullscreen().catch(() => {});
+        startWebcam();
+      } catch {
+        window.location.replace("/dashboard");
       } finally {
         setLoading(false);
       }
     };
 
     fetchExam();
-  }, [id, navigate]);
 
-  const handleChange = (questionId, option) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: option,
-    }));
+    const onFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        logViolation("FULLSCREEN_EXIT", "Exited fullscreen");
+      }
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        logViolation("TAB_SWITCH", "Tab switched");
+      }
+    };
+
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      stopWebcam();
+      document.exitFullscreen().catch(() => {});
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, [id]);
+
+  /* ===========================
+     ANSWERS
+  =========================== */
+  const handleChange = (qid, option) => {
+    setAnswers((prev) => ({ ...prev, [qid]: option }));
   };
 
+  /* ===========================
+     SUBMIT EXAM
+  =========================== */
   const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem("token");
-
       await axios.post(
         "http://localhost:5000/api/results/submit",
-        {
-          examId: exam._id, // ✅ FIXED
-          answers,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { examId: exam._id, answers },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert("Exam submitted successfully");
-      navigate("/dashboard");
-    } catch (err) {
-      alert("Failed to submit exam");
-      console.error(err);
+      stopWebcam();
+      document.exitFullscreen().catch(() => {});
+      window.location.replace("/dashboard");
+    } catch {
+      alert("Submit failed");
     }
   };
 
   if (loading) return <p className="p-4">Loading exam...</p>;
-
-  if (!exam || !exam.questions || exam.questions.length === 0) {
-    return <p className="p-4">No questions found for this exam</p>;
-  }
+  if (!exam) return null;
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">{exam.title}</h1>
+      <h1 className="text-2xl font-bold mb-4">{exam.title}</h1>
+
+      <video ref={videoRef} autoPlay muted className="w-40 h-32 border mb-4" />
 
       {exam.questions.map((q, index) => (
         <div key={q._id} className="mb-6 border p-4 rounded">
-          <p className="font-semibold mb-3">
+          <p className="font-semibold">
             {index + 1}. {q.questionText}
           </p>
 
@@ -90,7 +160,6 @@ export default function ExamPage() {
               <input
                 type="radio"
                 name={q._id}
-                value={opt}
                 onChange={() => handleChange(q._id, opt)}
               />
               <span className="ml-2">{opt}</span>

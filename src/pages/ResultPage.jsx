@@ -1,55 +1,68 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import Navbar from "../components/NavBar";
+import { useParams, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function ResultPage() {
-  const { id } = useParams(); // exam ID
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchResult = async () => {
       try {
         const token = localStorage.getItem("token");
-        // Updated API endpoint
+
         const res = await axios.get(
           `http://localhost:5000/api/results/exam/${id}`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
         setResult(res.data);
       } catch (err) {
-        console.error(err);
-        alert(err.response?.data?.message || "Error fetching result");
+        setError("Result not found for this exam");
       }
     };
 
     fetchResult();
   }, [id]);
 
-  if (!result) return <div className="p-8 text-white">Loading result...</div>;
-
   return (
     <>
       <Navbar />
-      <div className="p-8 min-h-screen bg-gray-900 text-white">
-        <h1 className="text-3xl font-bold mb-4">Your Result</h1>
-        <p className="text-xl mb-6">Score: {result.score}</p>
 
-        {result.answers && result.answers.length > 0 ? (
-          <div>
-            {result.answers.map((ans, idx) => (
-              <div key={idx} className="mb-4">
-                <p className="font-semibold">Question ID: {ans.questionId}</p>
-                <p>Your Answer: {ans.selectedAnswer}</p>
-              </div>
-            ))}
+      <div className="p-6 max-w-xl mx-auto">
+        <h1 className="text-2xl font-bold mb-4">Exam Result</h1>
+
+        {error && <p className="text-red-600">{error}</p>}
+
+        {result && (
+          <div className="border p-4 rounded">
+            <p>
+              <strong>Exam:</strong> {result.examTitle}
+            </p>
+            <p>
+              <strong>Score:</strong> {result.score}
+            </p>
+            <p>
+              <strong>Submitted At:</strong>{" "}
+              {new Date(result.submittedAt).toLocaleString("en-IN")}
+            </p>
           </div>
-        ) : (
-          <p>No answers submitted.</p>
         )}
+
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+        >
+          Back to Dashboard
+        </button>
       </div>
     </>
   );

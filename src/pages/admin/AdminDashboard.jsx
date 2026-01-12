@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AdminHeader from "../../components/AdminHeader";
+
 export default function AdminDashboard() {
   return (
     <div className="min-h-screen p-6 bg-gray-100">
+      <AdminHeader />
+      <br />
       <div className="grid gap-4 max-w-md">
         <Link
           to="/admin/question"

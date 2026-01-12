@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
   const [exams, setExams] = useState([]);
@@ -17,7 +18,6 @@ export default function Dashboard() {
           },
         });
 
-        // keep only valid exams
         const validExams = Array.isArray(res.data)
           ? res.data.filter(
               (exam) => exam && exam._id && exam.startTime && exam.endTime
@@ -47,55 +47,73 @@ export default function Dashboard() {
     navigate(`/exam/${examId}`);
   };
 
+  const viewResult = (examId) => {
+    navigate(`/result/${examId}`);
+  };
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Student Dashboard</h1>
+    <>
+      <Navbar />
 
-      {exams.length === 0 && <p>No exams available</p>}
+      <div className="p-6 max-w-4xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6">Student Dashboard</h1>
 
-      {exams.map((exam) => {
-        const status = getExamStatus(exam);
-        const isActive = status === "ACTIVE";
+        {exams.length === 0 && <p>No exams available</p>}
 
-        return (
-          <div
-            key={exam._id}
-            className="border p-4 rounded mb-4 flex justify-between items-center"
-          >
-            <div>
-              <h2 className="font-semibold text-lg">{exam.title}</h2>
+        {exams.map((exam) => {
+          const status = getExamStatus(exam);
+          const isActive = status === "ACTIVE";
 
-              <p>Start: {new Date(exam.startTime).toLocaleString("en-IN")}</p>
-
-              <p>End: {new Date(exam.endTime).toLocaleString("en-IN")}</p>
-
-              <span
-                className={`inline-block mt-2 px-3 py-1 text-sm rounded ${
-                  status === "ACTIVE"
-                    ? "bg-green-100 text-green-700"
-                    : status === "UPCOMING"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-red-100 text-red-700"
-                }`}
-              >
-                {status}
-              </span>
-            </div>
-
-            <button
-              disabled={!isActive}
-              onClick={() => startExam(exam._id)}
-              className={`px-4 py-2 rounded text-white ${
-                isActive
-                  ? "bg-blue-600 hover:bg-blue-700"
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
+          return (
+            <div
+              key={exam._id}
+              className="border p-4 rounded mb-4 flex justify-between items-center"
             >
-              Start Test
-            </button>
-          </div>
-        );
-      })}
-    </div>
+              <div>
+                <h2 className="font-semibold text-lg">{exam.title}</h2>
+
+                <p>Start: {new Date(exam.startTime).toLocaleString("en-IN")}</p>
+
+                <p>End: {new Date(exam.endTime).toLocaleString("en-IN")}</p>
+
+                <span
+                  className={`inline-block mt-2 px-3 py-1 text-sm rounded ${
+                    status === "ACTIVE"
+                      ? "bg-green-100 text-green-700"
+                      : status === "UPCOMING"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {status}
+                </span>
+              </div>
+
+              {/* ACTION BUTTONS */}
+              <div className="flex gap-3">
+                <button
+                  disabled={!isActive}
+                  onClick={() => startExam(exam._id)}
+                  className={`px-4 py-2 rounded text-white ${
+                    isActive
+                      ? "bg-blue-600 hover:bg-blue-700"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  Start Test
+                </button>
+
+                <button
+                  onClick={() => viewResult(exam._id)}
+                  className="px-4 py-2 rounded text-white bg-purple-600 hover:bg-purple-700"
+                >
+                  Result
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }
