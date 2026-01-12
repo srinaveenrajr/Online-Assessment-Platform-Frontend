@@ -1,88 +1,101 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/NavBar";
 
 export default function Dashboard() {
   const [exams, setExams] = useState([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/exams`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const token = localStorage.getItem("token");
 
-        setExams(res.data);
+        const res = await axios.get("http://localhost:5000/api/exams", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // keep only valid exams
+        const validExams = Array.isArray(res.data)
+          ? res.data.filter(
+              (exam) => exam && exam._id && exam.startTime && exam.endTime
+            )
+          : [];
+
+        setExams(validExams);
       } catch (err) {
-        alert("Failed to load exams");
-      } finally {
-        setLoading(false);
+        console.error("Failed to load exams", err);
       }
     };
 
     fetchExams();
   }, []);
 
-  const now = new Date();
+  const getExamStatus = (exam) => {
+    const now = new Date();
+    const start = new Date(exam.startTime);
+    const end = new Date(exam.endTime);
 
-  if (loading) return <p>Loading dashboard...</p>;
+    if (now < start) return "UPCOMING";
+    if (now > end) return "EXPIRED";
+    return "ACTIVE";
+  };
+
+  const startExam = (examId) => {
+    navigate(`/exam/${examId}`);
+  };
 
   return (
-    <>
-      <Navbar />
-      <div style={{ padding: "20px" }}>
-        <h2>Dashboard</h2>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Student Dashboard</h1>
 
-        {exams.length === 0 && <p>No exams available</p>}
+      {exams.length === 0 && <p>No exams available</p>}
 
-        {exams.map((exam) => {
-          const isActive =
-            now >= new Date(exam.startTime) && now <= new Date(exam.endTime);
+      {exams.map((exam) => {
+        const status = getExamStatus(exam);
+        const isActive = status === "ACTIVE";
 
-          return (
-            <div
-              key={exam._id}
-              style={{
-                border: "1px solid #ccc",
-                padding: "15px",
-                marginBottom: "15px",
-                borderRadius: "6px",
-              }}
-            >
-              <h3>{exam.title}</h3>
+        return (
+          <div
+            key={exam._id}
+            className="border p-4 rounded mb-4 flex justify-between items-center"
+          >
+            <div>
+              <h2 className="font-semibold text-lg">{exam.title}</h2>
 
-              <p>
-                Status:{" "}
-                <b style={{ color: isActive ? "green" : "red" }}>
-                  {isActive ? "Active" : "Not Active"}
-                </b>
-              </p>
+              <p>Start: {new Date(exam.startTime).toLocaleString("en-IN")}</p>
 
-              <button
-                disabled={!isActive}
-                onClick={() => navigate(`/exam/${exam._id}`)}
-                style={{
-                  backgroundColor: isActive ? "#007bff" : "#ccc",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 12px",
-                  cursor: isActive ? "pointer" : "not-allowed",
-                }}
+              <p>End: {new Date(exam.endTime).toLocaleString("en-IN")}</p>
+
+              <span
+                className={`inline-block mt-2 px-3 py-1 text-sm rounded ${
+                  status === "ACTIVE"
+                    ? "bg-green-100 text-green-700"
+                    : status === "UPCOMING"
+                    ? "bg-yellow-100 text-yellow-700"
+                    : "bg-red-100 text-red-700"
+                }`}
               >
-                Start Exam
-              </button>
+                {status}
+              </span>
             </div>
-          );
-        })}
-      </div>
-    </>
+
+            <button
+              disabled={!isActive}
+              onClick={() => startExam(exam._id)}
+              className={`px-4 py-2 rounded text-white ${
+                isActive
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
+            >
+              Start Test
+            </button>
+          </div>
+        );
+      })}
+    </div>
   );
 }

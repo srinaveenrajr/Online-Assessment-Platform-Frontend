@@ -1,11 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
 export default function AdminDashboard() {
   return (
     <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-
       <div className="grid gap-4 max-w-md">
         <Link
           to="/admin/question"

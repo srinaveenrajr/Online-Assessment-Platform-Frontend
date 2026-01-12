@@ -13,7 +13,7 @@ export default function ResultPage() {
         const token = localStorage.getItem("token");
         // Updated API endpoint
         const res = await axios.get(
-          `https://online-assessment-platform-backend-1.onrender.com/api/results/exam/${id}`,
+          `http://localhost:5000/api/results/exam/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -23,10 +23,7 @@ export default function AdminCreateQuestion() {
 
   const submitQuestion = async () => {
     try {
-      await axios.post(
-        "https://online-assessment-platform-backend-1.onrender.com/api/questions",
-        form
-      );
+      await axios.post("http://localhost:5000/api/questions", form);
       alert("Question created");
       setForm({
         questionText: "",
