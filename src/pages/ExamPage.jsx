@@ -15,22 +15,16 @@ export default function ExamPage() {
   const token = localStorage.getItem("token");
 
   /* ===========================
-     PROCTOR LOG (FIXED)
+     PROCTOR LOG
   =========================== */
   const logViolation = async (type, message) => {
     try {
       await axios.post(
         "http://localhost:5000/api/proctor/log",
-        {
-          examId: id,
-          type,
-          message,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { examId: id, type, message },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-    } catch (err) {
+    } catch {
       console.error("Proctor log failed");
     }
   };
@@ -57,7 +51,6 @@ export default function ExamPage() {
       streamRef.current.getTracks().forEach((t) => t.stop());
       streamRef.current = null;
     }
-
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.srcObject = null;
@@ -155,16 +148,19 @@ export default function ExamPage() {
             {index + 1}. {q.questionText}
           </p>
 
-          {q.options.map((opt, i) => (
-            <label key={i} className="block mt-2">
-              <input
-                type="radio"
-                name={q._id}
-                onChange={() => handleChange(q._id, opt)}
-              />
-              <span className="ml-2">{opt}</span>
-            </label>
-          ))}
+          {/* 🔥 FIX IS HERE */}
+          {q.options
+            .filter((opt) => opt && opt.trim() !== "")
+            .map((opt, i) => (
+              <label key={i} className="block mt-2">
+                <input
+                  type="radio"
+                  name={q._id}
+                  onChange={() => handleChange(q._id, opt)}
+                />
+                <span className="ml-2">{opt}</span>
+              </label>
+            ))}
         </div>
       ))}
 
