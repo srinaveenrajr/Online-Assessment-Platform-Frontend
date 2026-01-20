@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import AdminHeader from "../../components/AdminHeader";
 
 export default function AdminAnalytics() {
   const [exams, setExams] = useState([]);
@@ -14,11 +15,14 @@ export default function AdminAnalytics() {
   =========================== */
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/exams", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        "https://online-assessment-platform-backend-1.onrender.com/api/exams",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         setExams(res.data);
       })
@@ -36,11 +40,14 @@ export default function AdminAnalytics() {
     setLoading(true);
 
     axios
-      .get(`http://localhost:5000/api/results/analytics/${examId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        `https://online-assessment-platform-backend-1.onrender.com/api/results/analytics/${examId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         setRows(res.data);
         setLoading(false);
@@ -53,6 +60,9 @@ export default function AdminAnalytics() {
 
   return (
     <div style={{ padding: "30px" }}>
+      <AdminHeader />
+      <br />
+
       <h2 style={{ marginBottom: "20px" }}>📊 Exam Analytics</h2>
 
       {/* EXAM SELECT */}

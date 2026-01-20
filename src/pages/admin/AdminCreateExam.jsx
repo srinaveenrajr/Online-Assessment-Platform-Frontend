@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AdminHeader from "../../components/AdminHeader";
 
 export default function AdminCreateExam() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function AdminCreateExam() {
     const loadBanks = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/question-banks",
+          "https://online-assessment-platform-backend-1.onrender.com/api/question-banks",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -49,7 +50,7 @@ export default function AdminCreateExam() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/exams",
+        "https://online-assessment-platform-backend-1.onrender.com/api/exams",
         {
           title,
           startTime,
@@ -75,50 +76,56 @@ export default function AdminCreateExam() {
      UI
   =========================== */
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Create Exam</h2>
+    <div className="p-5">
+      <AdminHeader />
 
-      {error && <p className="text-red-600 mb-3">{error}</p>}
+      <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
+        <br />
 
-      <form onSubmit={handleSubmit}>
-        <input
-          className="border p-2 w-full mb-3"
-          placeholder="Exam Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <h2 className="text-2xl font-bold mb-4">Create Exam</h2>
 
-        <input
-          type="datetime-local"
-          className="border p-2 w-full mb-3"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
-        />
+        {error && <p className="text-red-600 mb-3">{error}</p>}
 
-        <input
-          type="datetime-local"
-          className="border p-2 w-full mb-3"
-          value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            className="border p-2 w-full mb-3"
+            placeholder="Exam Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
 
-        <select
-          className="border p-2 w-full mb-4"
-          value={questionBankId}
-          onChange={(e) => setQuestionBankId(e.target.value)}
-        >
-          <option value="">Select Question Bank</option>
-          {questionBanks.map((qb) => (
-            <option key={qb._id} value={qb._id}>
-              {qb.name}
-            </option>
-          ))}
-        </select>
+          <input
+            type="datetime-local"
+            className="border p-2 w-full mb-3"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+          />
 
-        <button className="bg-blue-600 text-white w-full py-2 rounded">
-          Create Exam
-        </button>
-      </form>
+          <input
+            type="datetime-local"
+            className="border p-2 w-full mb-3"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+          />
+
+          <select
+            className="border p-2 w-full mb-4"
+            value={questionBankId}
+            onChange={(e) => setQuestionBankId(e.target.value)}
+          >
+            <option value="">Select Question Bank</option>
+            {questionBanks.map((qb) => (
+              <option key={qb._id} value={qb._id}>
+                {qb.name}
+              </option>
+            ))}
+          </select>
+
+          <button className="bg-blue-600 text-white w-full py-2 rounded">
+            Create Exam
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

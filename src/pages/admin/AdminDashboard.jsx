@@ -7,12 +7,13 @@ export default function AdminDashboard() {
     <div className="min-h-screen p-6 bg-gray-100">
       <AdminHeader />
       <br />
-      <div className="grid gap-4 max-w-md">
+
+      <div className="grid gap-4 max-w-lg">
         <Link
           to="/admin/question"
           className="block bg-blue-600 text-white p-4 rounded"
         >
-          ➕ Create Question
+          ➕ Manage Questions
         </Link>
 
         <Link
@@ -27,6 +28,14 @@ export default function AdminDashboard() {
           className="block bg-purple-600 text-white p-4 rounded"
         >
           📝 Create Exam
+        </Link>
+
+        {/* ✅ NEW FEATURE */}
+        <Link
+          to="/admin/manage-exams"
+          className="block bg-indigo-600 text-white p-4 rounded"
+        >
+          🗂️ Manage Exams (Update / Delete)
         </Link>
 
         <Link

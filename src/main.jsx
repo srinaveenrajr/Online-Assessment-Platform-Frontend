@@ -15,6 +15,9 @@ import AdminCreateQuestionBank from "./pages/admin/AdminCreateQuestionBank";
 import AdminCreateExam from "./pages/admin/AdminCreateExam";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminProctorLogs from "./pages/admin/AdminProctorLogs";
+import AdminManageExams from "./pages/admin/AdminManageExams";
+import AdminUpdateExam from "./pages/admin/AdminUpdateExam";
+
 import AdminRoute from "./components/AdminRoute";
 import StudentRoute from "./components/StudentRoute";
 
@@ -101,6 +104,25 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           element={
             <AdminRoute>
               <AdminProctorLogs />
+            </AdminRoute>
+          }
+        />
+
+        {/* ✅ FIXED: ADMIN MANAGE EXAMS (PROTECTED) */}
+        <Route
+          path="/admin/manage-exams"
+          element={
+            <AdminRoute>
+              <AdminManageExams />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/update-exam/:id"
+          element={
+            <AdminRoute>
+              <AdminUpdateExam />
             </AdminRoute>
           }
         />

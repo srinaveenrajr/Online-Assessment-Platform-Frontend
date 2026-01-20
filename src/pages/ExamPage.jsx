@@ -20,7 +20,7 @@ export default function ExamPage() {
   const logViolation = async (type, message) => {
     try {
       await axios.post(
-        "http://localhost:5000/api/proctor/log",
+        "https://online-assessment-platform-backend-1.onrender.com/api/proctor/log",
         { examId: id, type, message },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -68,9 +68,12 @@ export default function ExamPage() {
 
     const fetchExam = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/exams/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          `https://online-assessment-platform-backend-1.onrender.com/api/exams/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         setExam(res.data);
         document.documentElement.requestFullscreen().catch(() => {});
@@ -120,7 +123,7 @@ export default function ExamPage() {
   const handleSubmit = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/results/submit",
+        "https://online-assessment-platform-backend-1.onrender.com/api/results/submit",
         { examId: exam._id, answers },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -140,7 +143,12 @@ export default function ExamPage() {
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">{exam.title}</h1>
 
-      <video ref={videoRef} autoPlay muted className="w-40 h-32 border mb-4" />
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        className="w-[250px] h-[250px] border mb-4"
+      />
 
       {exam.questions.map((q, index) => (
         <div key={q._id} className="mb-6 border p-4 rounded">
