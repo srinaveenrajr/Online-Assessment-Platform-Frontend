@@ -1,16 +1,221 @@
-# React + Vite
+# Online Assessment Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An end-to-end **Online Assessment Platform** built using the **MERN stack** (MongoDB, Express.js, React.js, Node.js). This system supports **admin-driven exam creation**, **question bank management**, **secure student exams**.
 
-Currently, two official plugins are available:
+This project is designed for academic institutions and training platforms to conduct online exams with better control, monitoring, and scalability.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 👨‍💼 Admin Module
 
-## Expanding the ESLint configuration
+- Admin authentication (JWT-based)
+- Create and manage **Question Banks**
+- Add, edit, delete questions (MCQ)
+- Create exams using question banks
+- Assign exams to students
+- View **proctoring violation logs**
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 👨‍🎓 Student Module
+
+- Secure student login
+- View assigned exams
+- Attempt exams within the given time
+- Restrictions on tab switching & visibility changes
+
+### 🛡️ Proctoring System
+
+- Detects tab change
+- Logs violations (type & message)
+- Stores logs in database
+- Admin can review all violations
+
+---
+
+## 🧱 Tech Stack
+
+### Frontend
+
+- React.js
+- React Router
+- Axios
+- Tailwind CSS / CSS Modules
+
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB (Mongoose)
+- JWT Authentication
+
+---
+
+## 📂 Project Structure
+
+```
+🔹 Frontend – React (Vite)
+
+client/
+│
+├── index.html
+├── package.json
+├── package-lock.json
+├── vite.config.js
+├── eslint.config.js
+├── README.md
+│
+└── src/
+    ├── main.jsx
+    ├── index.css
+    │
+    ├── components/
+    │   ├── AdminHeader.jsx
+    │   ├── NavBar.jsx
+    │   ├── ProtectedRoute.jsx
+    │   ├── AdminRoute.jsx
+    │   └── StudentRoute.jsx
+    │
+    ├── pages/
+    │   ├── Login.jsx
+    │   ├── Register.jsx
+    │   ├── Dashboard.jsx
+    │   ├── ExamPage.jsx
+    │   ├── ResultPage.jsx
+    │   │
+    │   └── admin/
+    │       ├── AdminDashboard.jsx
+    │       ├── AdminCreateExam.jsx
+    │       ├── AdminCreateQuestionBank.jsx
+    │       ├── AdminQuestionBanks.jsx
+    │       ├── AdminExams.jsx
+    │       └── AdminProctorLogs.jsx
+    │       └── AdminManageExams.jsx
+    │       └── AdminUpdateExam.jsx
+
+
+🔹 Backend – Node.js & Express
+server/
+│
+├── server.js
+├── package.json
+├── package-lock.json
+├── README.md
+├── .env
+│
+├── models/
+│   ├── User.js
+│   ├── Exam.js
+│   ├── Question.js
+│   ├── QuestionBank.js
+│   ├── Result.js
+│   └── ProctorLog.js
+│
+├── controllers/
+│   ├── authController.js
+│   ├── examController.js
+│   ├── questionController.js
+│   ├── questionBankController.js
+│   └── resultController.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── examRoutes.js
+│   ├── questionRoutes.js
+│   ├── questionBankRoutes.js
+│   ├── resultRoutes.js
+│   └── proctorRoutes.js
+│   └── analyticsRoutes.js
+│
+├── middleware/
+│   ├── authMiddleware.js
+│   └── adminMiddleware.js
+
+
+📝 Notes
+
+Frontend is built using React + Vite
+
+Backend follows MVC architecture (routes → controllers → models)
+
+Authentication is handled using JWT
+
+MongoDB is accessed via Mongoose
+
+---
+
+## 🔐 Authentication & Security
+
+- JWT-based authentication
+- Role-based access (Admin / Student)
+- Protected API routes
+- Token stored in localStorage
+
+---
+
+## 📊 Proctoring Logs
+
+Each violation includes:
+
+- Student ID
+- Exam ID
+- Violation type (e.g., TAB_SWITCH, VISIBILITY_CHANGE)
+- Message
+- Timestamp
+
+Stored in MongoDB and viewable by Admin.
+
+---
+
+⚙️ Setup Instructions
+
+This project uses two separate GitHub repositories: one for the Frontend (React) and one for the Backend (Node + Express).
+
+1️⃣ Clone the Repositories
+
+Frontend Repository
+
+git clone https://github.com/srinaveenrajr/Online-Assessment-Platform-Frontend.git
+cd Online-Assessment-Platform-Frontend
+
+Backend Repository
+
+git clone https://github.com/srinaveenrajr/Online-Assessment-Platform-Backend.git
+cd Online-Assessment-Platform-Backend
+
+2️⃣ Backend Setup (Server)
+
+cd server
+npm install
+
+Create a .env file inside the server folder:
+
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=anyrandomtext
+
+Run the backend server:
+
+npm run dev
+
+Backend will run on: http://localhost:5000
+
+3️⃣ Frontend Setup (Client)
+cd client
+npm install
+npm run dev
+
+Frontend will run on: http://localhost:5173
+
+Make sure the backend is running before starting the frontend.
+
+## 🧑‍💻 Author
+
+Developed as part of a **full-stack learning & assessment project** using MERN stack.
+
+---
+
+## 📄 License
+
+This project is for **educational purposes**. You are free to use and modify it.
+```
