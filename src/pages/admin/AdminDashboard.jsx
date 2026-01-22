@@ -8,7 +8,7 @@ export default function AdminDashboard() {
       <AdminHeader />
       <br />
 
-      <div className="grid grid-rows-2 grid-cols-3 gap-4 text-center p-20 lg:text-[25px] ">
+      <div className="grid grid-rows-2 grid-cols-3 gap-4 text-center lg:p-20` lg:text-[25px] ">
         <Link
           to="/admin/question"
           className="block  row-span-1 bg-blue-600 hover:bg-blue-700 shadow text-white p-4 rounded lg:h-[300px] lg:flex lg:justify-center lg:items-center"
