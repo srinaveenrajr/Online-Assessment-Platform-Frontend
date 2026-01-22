@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../utils/constants";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -11,14 +12,11 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "https://online-assessment-platform-backend-1.onrender.com/api/auth/register",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      const res = await axios.post(`${API_BASE}/api/auth/register`, {
+        name,
+        email,
+        password,
+      });
       alert(res.data.message); // User registered!
       navigate("/login");
     } catch (err) {

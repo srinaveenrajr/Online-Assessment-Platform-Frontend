@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../../components/AdminHeader";
+import { API_BASE } from "../../utils/constants";
 
 export default function AdminCreateExam() {
   const navigate = useNavigate();
@@ -19,14 +20,11 @@ export default function AdminCreateExam() {
   useEffect(() => {
     const loadBanks = async () => {
       try {
-        const res = await axios.get(
-          "https://online-assessment-platform-backend-1.onrender.com/api/question-banks",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const res = await axios.get(`${API_BASE}}/api/question-banks`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         setQuestionBanks(res.data);
       } catch (err) {
         console.error(err);
@@ -50,7 +48,7 @@ export default function AdminCreateExam() {
 
     try {
       await axios.post(
-        "https://online-assessment-platform-backend-1.onrender.com/api/exams",
+        `${API_BASE}/api/exams`,
         {
           title,
           startTime,
@@ -61,7 +59,7 @@ export default function AdminCreateExam() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       alert("Exam created successfully");

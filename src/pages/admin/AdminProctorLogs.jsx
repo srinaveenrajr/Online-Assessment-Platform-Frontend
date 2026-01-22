@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminHeader from "../../components/AdminHeader";
+import { API_BASE } from "../../utils/constants";
 
 export default function AdminProctorLogs() {
   const [logs, setLogs] = useState([]);
@@ -11,14 +12,11 @@ export default function AdminProctorLogs() {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await axios.get(
-          "https://online-assessment-platform-backend-1.onrender.com/api/proctor",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${API_BASE}/api/proctor`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setLogs(res.data);
       } catch (err) {

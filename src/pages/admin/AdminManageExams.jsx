@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../../components/AdminHeader";
 
-const API_BASE = "https://online-assessment-platform-backend-1.onrender.com";
+import { API_BASE } from "../../utils/constants";
 
 export default function AdminManageExams() {
   const [exams, setExams] = useState([]);
@@ -108,7 +108,7 @@ export default function AdminManageExams() {
                   {/* ✅ STATUS BADGE */}
                   <span
                     className={`inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full ${getStatusStyles(
-                      status
+                      status,
                     )}`}
                   >
                     {status}

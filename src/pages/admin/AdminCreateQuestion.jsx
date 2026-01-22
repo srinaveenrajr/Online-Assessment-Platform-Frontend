@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminHeader from "../../components/AdminHeader";
-
-const API_BASE = "https://online-assessment-platform-backend-1.onrender.com";
+import { API_BASE } from "../../utils/constants";
 
 export default function AdminQuestionManager() {
   const [questions, setQuestions] = useState([]);

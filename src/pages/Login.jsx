@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { API_BASE } from "../utils/constants";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,13 +12,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "https://online-assessment-platform-backend-1.onrender.com/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const res = await axios.post(`${API_BASE}/api/auth/login`, {
+        email,
+        password,
+      });
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));

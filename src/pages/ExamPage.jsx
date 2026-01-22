@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { API_BASE } from "../utils/constants";
 
 export default function ExamPage() {
   const { id } = useParams();
@@ -20,9 +21,9 @@ export default function ExamPage() {
   const logViolation = async (type, message) => {
     try {
       await axios.post(
-        "https://online-assessment-platform-backend-1.onrender.com/api/proctor/log",
+        `${API_BASE}/api/proctor/log`,
         { examId: id, type, message },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
     } catch {
       console.error("Proctor log failed");
@@ -68,12 +69,9 @@ export default function ExamPage() {
 
     const fetchExam = async () => {
       try {
-        const res = await axios.get(
-          `https://online-assessment-platform-backend-1.onrender.com/api/exams/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get(`${API_BASE}}/api/exams/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         setExam(res.data);
         document.documentElement.requestFullscreen().catch(() => {});
@@ -123,9 +121,9 @@ export default function ExamPage() {
   const handleSubmit = async () => {
     try {
       await axios.post(
-        "https://online-assessment-platform-backend-1.onrender.com/api/results/submit",
+        `${API_BASE}/api/results/submit`,
         { examId: exam._id, answers },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       stopWebcam();

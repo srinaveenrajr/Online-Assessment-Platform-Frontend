@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/NavBar";
+import { API_BASE } from "../utils/constants";
 
 export default function ResultPage() {
   const { id } = useParams();
@@ -15,14 +16,11 @@ export default function ResultPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(
-          `https://online-assessment-platform-backend-1.onrender.com/api/results/exam/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${API_BASE}}/api/results/exam/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setResult(res.data);
       } catch (err) {

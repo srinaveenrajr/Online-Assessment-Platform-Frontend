@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminHeader from "../../components/AdminHeader";
-
-const API_BASE = "https://online-assessment-platform-backend-1.onrender.com";
+import { API_BASE } from "../../utils/constants";
 
 export default function AdminUpdateExam() {
   const { id } = useParams();
@@ -51,7 +50,7 @@ export default function AdminUpdateExam() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       alert("Exam updated successfully");

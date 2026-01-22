@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/NavBar";
+import { API_BASE } from "../utils/constants";
 
 export default function Dashboard() {
   const [exams, setExams] = useState([]);
@@ -12,18 +13,15 @@ export default function Dashboard() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(
-          "https://online-assessment-platform-backend-1.onrender.com/api/exams",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${API_BASE}/api/exams`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const validExams = Array.isArray(res.data)
           ? res.data.filter(
-              (exam) => exam && exam._id && exam.startTime && exam.endTime
+              (exam) => exam && exam._id && exam.startTime && exam.endTime,
             )
           : [];
 
@@ -84,8 +82,8 @@ export default function Dashboard() {
                     status === "ACTIVE"
                       ? "bg-green-100 text-green-700"
                       : status === "UPCOMING"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-red-100 text-red-700"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
                   }`}
                 >
                   {status}

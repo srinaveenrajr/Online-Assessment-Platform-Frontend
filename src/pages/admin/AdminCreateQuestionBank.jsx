@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../../components/AdminHeader";
-
-const API_BASE = "https://online-assessment-platform-backend-1.onrender.com";
+import { API_BASE } from "../../utils/constants";
 
 export default function AdminCreateQuestionBank() {
   const [name, setName] = useState("");
@@ -34,7 +33,7 @@ export default function AdminCreateQuestionBank() {
 
   const toggleQuestion = (id) => {
     setSelectedQuestions((prev) =>
-      prev.includes(id) ? prev.filter((q) => q !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((q) => q !== id) : [...prev, id],
     );
   };
 
@@ -59,7 +58,7 @@ export default function AdminCreateQuestionBank() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       alert("Question bank created successfully");
