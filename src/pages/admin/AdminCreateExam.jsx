@@ -20,7 +20,7 @@ export default function AdminCreateExam() {
   useEffect(() => {
     const loadBanks = async () => {
       try {
-        const res = await axios.get(`${API_BASE}}/api/question-banks`, {
+        const res = await axios.get(`${API_BASE}/api/question-banks`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

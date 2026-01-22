@@ -69,7 +69,7 @@ export default function ExamPage() {
 
     const fetchExam = async () => {
       try {
-        const res = await axios.get(`${API_BASE}}/api/exams/${id}`, {
+        const res = await axios.get(`${API_BASE}/api/exams/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

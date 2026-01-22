@@ -16,7 +16,7 @@ export default function ResultPage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(`${API_BASE}}/api/results/exam/${id}`, {
+        const res = await axios.get(`${API_BASE}/api/results/exam/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
