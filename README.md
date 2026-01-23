@@ -4,6 +4,32 @@ An end-to-end **Online Assessment Platform** built using the **MERN stack** (Mon
 
 This project is designed for academic institutions and training platforms to conduct online exams with better control, monitoring, and scalability.
 
+🔐 Authentication & Role-Based Access
+
+This Online Assessment Platform implements role-based authentication to ensure security and real-world usability.
+
+👨‍🎓 Student Role
+
+Students can register and log in
+
+Attend available exams
+
+Submit exams and view dashboard
+
+👉 Evaluators can test student functionality by registering a new student account using the live link.
+
+👨‍💼 Admin Role
+
+Admin can create exams
+
+Create question banks
+
+Manage students and assessments
+
+⚠️ Admin credentials are intentionally not shared publicly to prevent unauthorized access and protect system integrity.
+
+If admin access is required for evaluation purposes, credentials can be shared upon request.
+
 ---
 
 ## 🚀 Features
@@ -100,7 +126,6 @@ server/
 ├── server.js
 ├── package.json
 ├── package-lock.json
-├── README.md
 ├── .env
 │
 ├── models/
