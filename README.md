@@ -26,8 +26,8 @@ Create question banks
 
 Manage students and assessments
 
-**⚠️ Admin credentials : mail id  : srinaveenraj6@gmail.com 
-                       password : 123456  **  
+⚠️ Admin credentials : mail id  : srinaveenraj6@gmail.com 
+                       password : 123456 
 
 ---
 
