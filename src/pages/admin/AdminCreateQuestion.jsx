@@ -100,114 +100,116 @@ export default function AdminQuestionManager() {
       <AdminHeader />
       <br />
 
-      {/* ================= FORM ================= */}
-      <div className="bg-white p-6 rounded shadow max-w-xl mx-auto">
-        <h2 className="text-2xl font-bold mb-4">
-          {editingId ? "Update Question" : "Create Question"}
-        </h2>
+      <div className=" flex">
+        {/* ================= FORM ================= */}
+        <div className="bg-white p-6 rounded shadow max-w-xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">
+            {editingId ? "Update Question" : "Create Question"}
+          </h2>
 
-        <input
-          name="questionText"
-          placeholder="Question"
-          value={form.questionText}
-          onChange={handleChange}
-          className="w-full border p-2 mb-2"
-        />
-
-        {form.options.map((opt, i) => (
           <input
-            key={i}
-            placeholder={`Option ${i + 1}`}
-            value={opt}
-            onChange={(e) => handleOptionChange(i, e.target.value)}
+            name="questionText"
+            placeholder="Question"
+            value={form.questionText}
+            onChange={handleChange}
             className="w-full border p-2 mb-2"
           />
-        ))}
 
-        <input
-          name="correctAnswer"
-          placeholder="Correct Answer"
-          value={form.correctAnswer}
-          onChange={handleChange}
-          className="w-full border p-2 mb-2"
-        />
-
-        <input
-          name="topic"
-          placeholder="Topic"
-          value={form.topic}
-          onChange={handleChange}
-          className="w-full border p-2 mb-2"
-        />
-
-        <select
-          name="difficulty"
-          value={form.difficulty}
-          onChange={handleChange}
-          className="w-full border p-2 mb-4"
-        >
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-
-        <div className="flex gap-2">
-          <button
-            onClick={submitQuestion}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            {editingId ? "Update Question" : "Create Question"}
-          </button>
-
-          {editingId && (
-            <button
-              onClick={resetForm}
-              className="bg-gray-500 text-white px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* ================= LIST ================= */}
-      <div className="max-w-5xl mx-auto mt-10">
-        <h3 className="text-xl font-bold mb-4">All Questions</h3>
-
-        <div className="space-y-3">
-          {questions.map((q) => (
-            <div
-              key={q._id}
-              className="bg-white p-4 rounded shadow flex justify-between items-start"
-            >
-              <div>
-                <p className="font-medium">{q.questionText}</p>
-                <p className="text-sm text-gray-600 mt-1">
-                  📘 {q.topic} | 🎯 {q.difficulty}
-                </p>
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => editQuestion(q)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={() => deleteQuestion(q._id)}
-                  className="bg-red-600 text-white px-3 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
+          {form.options.map((opt, i) => (
+            <input
+              key={i}
+              placeholder={`Option ${i + 1}`}
+              value={opt}
+              onChange={(e) => handleOptionChange(i, e.target.value)}
+              className="w-full border p-2 mb-2"
+            />
           ))}
 
-          {questions.length === 0 && (
-            <p className="text-gray-500">No questions found</p>
-          )}
+          <input
+            name="correctAnswer"
+            placeholder="Correct Answer"
+            value={form.correctAnswer}
+            onChange={handleChange}
+            className="w-full border p-2 mb-2"
+          />
+
+          <input
+            name="topic"
+            placeholder="Topic"
+            value={form.topic}
+            onChange={handleChange}
+            className="w-full border p-2 mb-2"
+          />
+
+          <select
+            name="difficulty"
+            value={form.difficulty}
+            onChange={handleChange}
+            className="w-full border p-2 mb-4"
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+
+          <div className="flex gap-2">
+            <button
+              onClick={submitQuestion}
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              {editingId ? "Update Question" : "Create Question"}
+            </button>
+
+            {editingId && (
+              <button
+                onClick={resetForm}
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* ================= LIST ================= */}
+        <div className="max-w-5xl mx-auto mt-10">
+          <h3 className="text-xl font-bold mb-4">All Questions</h3>
+
+          <div className="space-y-3">
+            {questions.map((q) => (
+              <div
+                key={q._id}
+                className="bg-white p-4 rounded shadow flex justify-between items-start w-[700px]"
+              >
+                <div>
+                  <p className="font-medium">{q.questionText}</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    📘 {q.topic} | 🎯 {q.difficulty}
+                  </p>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => editQuestion(q)}
+                    className="bg-yellow-500 text-white px-3 py-1 rounded"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => deleteQuestion(q._id)}
+                    className="bg-red-600 text-white px-3 py-1 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {questions.length === 0 && (
+              <p className="text-gray-500">No questions found</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
