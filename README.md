@@ -26,9 +26,8 @@ Create question banks
 
 Manage students and assessments
 
-⚠️ Admin credentials are intentionally not shared publicly to prevent unauthorized access and protect system integrity.
-
-If admin access is required for evaluation purposes, credentials can be shared upon request.
+**⚠️ Admin credentials : mail id  : srinaveenraj6@gmail.com 
+                       password : 123456  **  
 
 ---
 
