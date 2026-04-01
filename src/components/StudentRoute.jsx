@@ -1,10 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function StudentRoute({ children }) {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  if (!user) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
   }
 
